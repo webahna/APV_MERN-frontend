@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {useState} from 'react';
 import Alerta from "../components/Alerta";
 import clienteAxios from "../config/axios";
-
+import Swal from "sweetalert2";
 
 
 const Registrar = () => {
@@ -13,23 +13,44 @@ const Registrar = () => {
 
     const [alerta, setAlerta] = useState({})
 
-
+    const navigate = useNavigate()
 
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         if([nombre,email,password,repetirPassword].includes('')){
-            setAlerta({msg: 'Hay campos vacios', error: true})
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Hay campos vacios',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            // setAlerta({msg: 'Hay campos vacios', error: true})
             return;
         }
 
         if(password !== repetirPassword){
-            setAlerta({msg: 'Las contraseñas no son iguales', error: true})
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Las contraseñas no coinciden',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            // setAlerta({msg: 'Las contraseñas no son iguales', error: true})
             return;
         }
         
         if(password.length < 6){
-            setAlerta({msg: 'la contraseña es muy corta, agregar minimo 6 caracteres', error: true})
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'La contraseña debe tener al menos 6 caracteres',
+                showConfirmButton: false,
+                timer: 2500
+              })
+            // setAlerta({msg: 'la contraseña es muy corta, agregar minimo 6 caracteres', error: true})
             return;
         }
         setAlerta({})
@@ -37,10 +58,21 @@ const Registrar = () => {
         // Crear el usuario en la api
         try {
             await clienteAxios.post('/veterinarios', { nombre, email, password })
-            setAlerta({
-                msg: 'Creado Correctamente, revisa tu email',
-                error: false
-            })
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Cuenta creada correctamente, revisa tu email',
+                showConfirmButton: false,
+                timer: 4000
+
+              })
+              setTimeout(() => {
+                navigate('/');
+              }, 4000);
+            // setAlerta({
+            //     msg: 'Creado Correctamente, revisa tu email',
+            //     error: false
+            // })
         } catch (error) {
             setAlerta({
                 msg: error.response.data.msg,

@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import Alerta from './Alerta';
 import usePacientes from '../hooks/usePacientes';
+import Swal from 'sweetalert2'
 
 const Formulario = () => {
 
@@ -31,30 +32,55 @@ const Formulario = () => {
         e.preventDefault();
 
         if([nombre,propietario,email,fecha,sintomas].includes('')){
-            setAlerta({
-                msg: 'Hay campos vacios',
-                error: true
-            })
-            setTimeout(() => {
-                setAlerta({
-                    error:false
-                })
-            },2000)
+
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Hay campos vacios',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            // setAlerta({
+            //     msg: 'Hay campos vacios',
+            //     error: true
+            // })
+            // setTimeout(() => {
+            //     setAlerta({
+            //         error:false
+            //     })
+            // },2000)
             return;
         }
 
 
         
         guardarPaciente({nombre,propietario,email,fecha,sintomas, id})
-        setAlerta({
-            msg: 'Guardado correctamente',
-            error: false
-        })
-        setTimeout(() => {
-            setAlerta({
-                error: true
-            })
-        }, 3000);
+        if(id){
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Paciente Editado Correctamente',
+                showConfirmButton: false,
+                timer: 1500
+              })
+              return
+        }
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Paciente Agregado Correctamente',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        // setAlerta({
+        //     msg: 'Guardado correctamente',
+        //     error: false
+        // })
+        // setTimeout(() => {
+        //     setAlerta({
+        //         error: true
+        //     })
+        // }, 3000);
         setNombre('')
         setPropietario('')
         setEmail('')

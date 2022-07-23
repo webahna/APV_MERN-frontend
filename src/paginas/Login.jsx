@@ -3,6 +3,7 @@ import useAuth from '../hooks/useAuth';
 import {useState} from 'react';
 import Alerta from "../components/Alerta";
 import clienteAxios from '../config/axios';
+import Swal from 'sweetalert2';
 
 const Login = () => {
 
@@ -18,20 +19,38 @@ const Login = () => {
     const handleSubmit = async e => {
         e.preventDefault()
         if([email,password].includes('')){
-            setAlerta({ msg: 'Hay campos vacios', error: true })
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Hay campos vacios',
+                showConfirmButton: false,
+                timer: 2500
+
+              })
+            // setAlerta({ msg: 'Hay campos vacios', error: true })
             return
         }
         
         try {
             const {data} = await clienteAxios.post('/veterinarios/login', {email,password});
             
-            setAlerta({
-                msg: 'Iniciando sesion... '
-            })
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Iniciando sesion...',
+                showConfirmButton: false,
+                timer: 2000
+
+              })
+            // setAlerta({
+            //     msg: 'Iniciando sesion... '
+            // })
 
             localStorage.setItem('token', data.token)
             setAuth(data)
-            navigate('/admin');
+            setTimeout(() => {
+                navigate('/admin');
+            }, 2000);
         } catch (error) {
             setAlerta({
                 msg: error.response.data.msg,
