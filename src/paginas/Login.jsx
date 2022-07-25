@@ -51,6 +51,7 @@ const Login = () => {
             setTimeout(() => {
                 navigate('/admin');
             }, 2000);
+            location.reload();
         } catch (error) {
             setAlerta({
                 msg: error.response.data.msg,
