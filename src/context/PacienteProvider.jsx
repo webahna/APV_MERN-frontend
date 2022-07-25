@@ -1,12 +1,13 @@
 import { createContext, useState, useEffect } from "react";
 import clienteAxios from "../config/axios";
 import Swal from 'sweetalert2'
+import useAuth from "../hooks/useAuth";
 
 const PacientesContext = createContext()
 
 
 const PacientesProvider = ({children}) => {
-
+    const {auth} = useAuth()
     const [pacientes, setPacientes] = useState([])
     const [paciente, setPaciente] = useState([])
 
@@ -30,7 +31,7 @@ const PacientesProvider = ({children}) => {
             }
         }
         obtenerPacientes()
-    },[])
+    },[auth])
 
 
     const guardarPaciente = async (paciente) => {
